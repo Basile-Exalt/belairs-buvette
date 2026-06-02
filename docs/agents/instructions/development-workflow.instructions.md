@@ -4,6 +4,8 @@ This document defines the default working method for agents contributing code in
 
 The goal is to keep changes small, behavior-driven, and aligned with the project architecture.
 
+Language: All production code, tests, identifiers, and public APIs created as part of this workflow must be written in English.
+
 ## 1. Start From Behavior, Not From Frameworks
 
 Before writing code:

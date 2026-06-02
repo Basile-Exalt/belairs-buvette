@@ -8,6 +8,8 @@ Infrastructure tests should prove that technical adapters correctly implement th
 
 Test the adapter against the real technical boundary whenever practical.
 
+Language: Tests and any test-support code in the `infrastructure` module must be written in English.
+
 Examples:
 - a repository against a real database
 - an HTTP client against a controllable test server

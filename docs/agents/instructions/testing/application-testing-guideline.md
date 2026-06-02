@@ -4,6 +4,8 @@ This document defines how to test the `application` module.
 
 The application layer exists to expose domain behavior cleanly to callers. Its tests should prove the incoming boundary, not re-implement the domain test suite.
 
+Language: Tests and test-related code in the `application` module (including test names and fixtures) must be written in English.
+
 ## Purpose of Application Tests
 
 Application tests should verify:

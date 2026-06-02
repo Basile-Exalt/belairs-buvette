@@ -8,6 +8,8 @@ The domain module is the primary home of business behavior. Most feature confide
 
 Drive tests through domain use cases or the smallest public domain entry point that expresses the behavior.
 
+Language: All tests and test artifacts (test method names, fixtures, fake implementations, and any code added under `src/test`) must be written in English.
+
 Tests should prove business outcomes, not internal implementation steps.
 
 ## What Domain Tests Must Cover

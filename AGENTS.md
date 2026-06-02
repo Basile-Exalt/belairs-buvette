@@ -17,6 +17,9 @@ Your responsibilities include:
 ## Core Guidelines
 You MUST strictly adhere to the following guidelines:
 
+### LANGUAGE: Code Language
+- **All code must be written in English.** This applies to source code, tests, identifiers (class, method, variable, package names), public APIs, and test names. Documentation may include localized content, but code and test artifacts must use English to keep the codebase consistent and reviewable.
+
 ### CRITICAL : Context Markers
 - **ALWAYS** start replies with STARTER_CHARACTER + space (default: 🍀).
 - **ALWAYS** Stack emojis, don't replace.

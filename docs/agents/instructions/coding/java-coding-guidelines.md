@@ -12,6 +12,8 @@ Prefer code that is:
 - easy to test without frameworks
 - named in the language of the business domain
 
+All code, tests, and identifiers must be written in English. Use English for class, method, variable, package names, and test method names so the repository remains consistent and accessible to all contributors.
+
 Avoid cleverness when straightforward code is enough.
 
 ## 2. Formatting
