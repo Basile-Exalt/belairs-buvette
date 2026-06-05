@@ -45,4 +45,12 @@ public final class TestUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static void mockInvalidRequest(CreateOrderUseCase mock) {
+        try {
+            when(mock.create(any(CreateOrderRequest.class))).thenThrow(new com.it.exalt.belair.domain.order.InvalidOrderException("articles.empty"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

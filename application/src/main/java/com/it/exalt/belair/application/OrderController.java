@@ -19,13 +19,11 @@ public class OrderController {
 
     @PostMapping(path = "/commandes", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
-        if (request == null || request.articles() == null || request.articles().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
         try {
             CreateOrderResponse resp = createOrderUseCase.create(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        } catch (com.it.exalt.belair.domain.order.InvalidOrderException e) {
+            return ResponseEntity.badRequest().build();
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

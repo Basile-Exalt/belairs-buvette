@@ -36,13 +36,15 @@ class OrderApiIntegrationTest {
     void setUp() {
         // Default mock returns EN_ATTENTE
         reset(createOrderUseCase);
-        TestUtils.mockSuccess(createOrderUseCase);
     }
 
     @Test
     void shouldCreateOrderAndReturn201_withCommandeId_and_statusPending() throws Exception {
         CreateOrderRequest.Article article = new CreateOrderRequest.Article("mojito", 2);
         CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
+
+        // arrange
+        TestUtils.mockSuccess(createOrderUseCase);
 
         MvcResult result = mockMvc.perform(post("/commandes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -73,9 +75,11 @@ class OrderApiIntegrationTest {
     void shouldReturn400_whenRequestBodyIsInvalid() throws Exception {
         CreateOrderRequest request = new CreateOrderRequest("festivalier-42", Collections.emptyList());
 
+        TestUtils.mockInvalidRequest(createOrderUseCase);
+
         mockMvc.perform(post("/commandes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtils.toJson(request)))
-                .andExpect(status().isBadRequest());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.toJson(request)))
+            .andExpect(status().isBadRequest());
     }
 }
