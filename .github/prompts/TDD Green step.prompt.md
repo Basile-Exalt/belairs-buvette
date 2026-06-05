@@ -110,6 +110,14 @@ La sortie JSON finale doit comporter précisément ces champs :
 - Incluez des descriptions concises et un `patch` si la modification est simple à afficher inline.
 - Si l'exécution du test est impossible dans l'environnement actuel, précisez l'étape qui a été faite et fournissez la sortie JSON avec `result: "manual-check-required"` et un champ `reason`.
 
+IMPORTANT: La réponse peut contenir une brève explication ou un résumé en texte libre, mais le JSON final DOIT être placé dans un bloc de code séparé et copiable. Ce bloc doit utiliser une balise de code triple backticks avec le langage `json` :
+
+```json
+{ ... }
+```
+
+Le bloc ` ```json ` doit contenir uniquement l'objet JSON (aucun texte, commentaire ou métadonnée avant ou après dans ce bloc). Cela permet de copier facilement le JSON indépendamment du reste de la réponse.
+
 ### Exemple concret — implémentation minimale IN-TEST
 
 Ci-dessous un exemple concret basé sur le scénario "shouldReturnZeroWhenNoTokens". Le test lui-même reste inchangé ; toutes les implémentations minimales nécessaires pour qu'il passe sont ajoutées DANS la classe de test (classes internes, helpers, etc.).

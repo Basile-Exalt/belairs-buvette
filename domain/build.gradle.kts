@@ -7,3 +7,8 @@
 plugins {
     id("buildlogic.java-library-conventions")
 }
+
+dependencies {
+    // Assertions library for richer fluent assertions in tests
+    testImplementation("org.assertj:assertj-core:3.24.2")
+}
