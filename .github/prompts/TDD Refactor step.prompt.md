@@ -22,11 +22,17 @@ model: GPT-5 mini (copilot)
    - Each modification must be a minimal, atomic refactor (one small change per micro-step).
    - After each micro-step, run only the affected test(s) or the single targeted test. If failing, revert that micro-step and report the failure.
    - Prefer adding small production files (classes, records, interfaces) under `domain/src/main/java/...` (or appropriate module) following repository package conventions. Do NOT add production code in test packages.
+   - Exception: small, test-only helpers (for JSON helpers, ObjectMapper, and Mockito stubbing helpers) are allowed under `application/src/test/java/...` as `TestUtils` when necessary to avoid duplicating code across tests. If you add such helpers, place them in `com.it.exalt.belair.application.utils.TestUtils` and use them from tests.
    - Use the coding conventions found in the repository: `AGENTS.md`, `docs/agents/instructions/coding/java-coding-guidelines.md`, and testing guidelines in `docs/agents/instructions/testing/*.md`.
    - Keep changes minimal: avoid large refactors or cross-cutting moves in a single step.
 
 4. Micro-step workflow (repeat until refactor complete):
    a) Identify a small piece of production-like code inside the test (class, method, enum) from `changes` in the input JSON.
+      - If the test already depends on a shared test helper (for example `TestUtils`), prefer creating or reusing a `TestUtils` under `application/src/test/java/com/it/exalt/belair/application/utils/TestUtils.java` containing:
+        - a shared `ObjectMapper MAPPER` instance,
+        - `byte[] toJson(Object)` and `<T> T fromResult(MvcResult, Class<T>)` helpers,
+        - factory helpers for common domain responses (e.g., `CreateOrderResponse successResponse()`),
+        - Mockito stubbing helpers `mockSuccess(CreateOrderUseCase)` and `mockUnauthorized(CreateOrderUseCase)`.
    b) Create the smallest production class that preserves behavior (use `record` for DTO/command when appropriate).
    c) Update the test to reference the new production class (only imports and type references inside the test). Do not alter test assertions or logic.
    d) Run the single targeted test (or minimal test set). If it passes, record the micro-step as successful and proceed. If it fails, undo and produce a diagnostic.
@@ -36,9 +42,21 @@ model: GPT-5 mini (copilot)
    - Use English-only identifiers and tests as per repository rules.
    - Prefer `record` for simple immutable command/DTO types; prefer `final` classes for small immutable value objects.
    - Keep visibility package-private or public only when required by tests or cross-module wiring.
+   - When creating exceptions used by tests (for example `UnauthorizedException`), ensure the constructor signature matches the application code. In this repository the production class `com.it.exalt.belair.application.UnauthorizedException` expects a `String message` parameter. When stubbing behavior in tests, construct the exception with a message: `new UnauthorizedException("unauthorized")`.
 
 6. Tests and verification:
    - After each micro-step run the single test named in `testMethod` using Gradle command for the domain module. If Gradle execution is impossible in the environment, report `manual-check-required` with a `reason` and the exact shell command to run locally.
+   - Preferred Gradle commands for local verification (run the single targeted test):
+
+```bash
+./gradlew :application:test --tests "<fully.qualified.TestClassName>#<testMethod>"
+```
+
+   - Example for the integration test used in this repo:
+
+```bash
+./gradlew :application:test --tests "com.it.exalt.belair.application.order.OrderApiIntegrationTest"
+```
    - Do not modify other tests. If other tests break, rollback last micro-step and report the failure with Gradle output.
 
 7. Output requirements (final response):

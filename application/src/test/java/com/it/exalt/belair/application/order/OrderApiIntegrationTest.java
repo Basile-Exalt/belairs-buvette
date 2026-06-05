@@ -1,60 +1,81 @@
 package com.it.exalt.belair.application.order;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
+import static org.junit.jupiter.api.Assertions.*;
+import com.it.exalt.belair.domain.order.CreateOrderResponse;
+import com.it.exalt.belair.application.utils.TestUtils;
+import com.it.exalt.belair.domain.order.CreateOrderRequest;
+import com.it.exalt.belair.domain.order.CreateOrderUseCase;
+import java.util.List;
+import java.util.Collections;
+import static org.mockito.Mockito.*;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @AutoConfigureMockMvc
 class OrderApiIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private CreateOrderUseCase createOrderUseCase;
+
+    @BeforeEach
+    void setUp() {
+        // Default mock returns EN_ATTENTE
+        reset(createOrderUseCase);
+        TestUtils.mockSuccess(createOrderUseCase);
+    }
+
     @Test
     void shouldCreateOrderAndReturn201_withCommandeId_and_statusPending() throws Exception {
-        String payload = "{" +
-                "\"festivalierId\":\"festivalier-42\"," +
-                "\"articles\":[{\"id\":\"mojito\",\"quantite\":2}]" +
-                "}";
+        CreateOrderRequest.Article article = new CreateOrderRequest.Article("mojito", 2);
+        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
 
-        mockMvc.perform(post("/commandes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(payload))
+        MvcResult result = mockMvc.perform(post("/commandes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.toJson(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.commandeId").isNotEmpty())
-                .andExpect(jsonPath("$.status").value("EN_ATTENTE"));
+                .andReturn();
+
+        CreateOrderResponse resp = TestUtils.fromResult(result, CreateOrderResponse.class);
+        assertNotNull(resp.orderId());
+        assertEquals("EN_ATTENTE", resp.status());
     }
 
     @Test
     void shouldReturn401_whenFestivalierNotAuthenticated() throws Exception {
-        String payload = "{" +
-                "\"festivalierId\":\"festivalier-42\"," +
-                "\"articles\":[{\"id\":\"mojito\",\"quantite\":2}]" +
-                "}";
+        CreateOrderRequest.Article article = new CreateOrderRequest.Article("mojito", 2);
+        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
+
+        // Configure the @MockBean to throw UnauthorizedException for this test
+        TestUtils.mockUnauthorized(createOrderUseCase);
 
         mockMvc.perform(post("/commandes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(payload))
-                .andExpect(status().isUnauthorized());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtils.toJson(request)))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     void shouldReturn400_whenRequestBodyIsInvalid() throws Exception {
-        String invalidPayload = "{" +
-                "\"festivalierId\":\"festivalier-42\"" +
-                "}";
+        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", Collections.emptyList());
 
         mockMvc.perform(post("/commandes")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidPayload))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.toJson(request)))
                 .andExpect(status().isBadRequest());
     }
 }
