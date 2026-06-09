@@ -1,8 +1,11 @@
 package com.it.exalt.belair.application;
 
+import com.it.exalt.belair.domain.order.ArticleInconnuException;
 import com.it.exalt.belair.domain.order.CreateOrderRequest;
 import com.it.exalt.belair.domain.order.CreateOrderResponse;
 import com.it.exalt.belair.domain.order.CreateOrderUseCase;
+import com.it.exalt.belair.domain.order.StockInsuffisantException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +25,7 @@ public class OrderController {
         try {
             CreateOrderResponse resp = createOrderUseCase.create(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(resp);
-        } catch (com.it.exalt.belair.domain.order.InvalidOrderException e) {
+        } catch (ArticleInconnuException | StockInsuffisantException e) {
             return ResponseEntity.badRequest().build();
         } catch (UnauthorizedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

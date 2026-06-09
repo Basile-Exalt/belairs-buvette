@@ -5,6 +5,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.it.exalt.belair.domain.order.CreateOrderRequest;
 import com.it.exalt.belair.domain.order.CreateOrderResponse;
 import com.it.exalt.belair.domain.order.CreateOrderUseCase;
+import com.it.exalt.belair.domain.order.StockInsuffisantException;
 import com.it.exalt.belair.application.UnauthorizedException;
 
 import java.util.UUID;
@@ -48,7 +49,7 @@ public final class TestUtils {
 
     public static void mockInvalidRequest(CreateOrderUseCase mock) {
         try {
-            when(mock.create(any(CreateOrderRequest.class))).thenThrow(new com.it.exalt.belair.domain.order.InvalidOrderException("articles.empty"));
+            when(mock.create(any(CreateOrderRequest.class))).thenThrow(new StockInsuffisantException("articles.empty"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

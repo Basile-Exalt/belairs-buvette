@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.it.exalt.belair.domain.order.CreateOrderResponse;
 import com.it.exalt.belair.application.utils.TestUtils;
 import com.it.exalt.belair.domain.order.CreateOrderRequest;
+import com.it.exalt.belair.domain.order.Article;
 import com.it.exalt.belair.domain.order.CreateOrderUseCase;
 import java.util.List;
 import java.util.Collections;
@@ -40,7 +41,7 @@ class OrderApiIntegrationTest {
 
     @Test
     void shouldCreateOrderAndReturn201_withCommandeId_and_statusPending() throws Exception {
-        CreateOrderRequest.Article article = new CreateOrderRequest.Article("mojito", 2);
+        Article article = new Article("mojito", 2);
         CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
 
         // arrange
@@ -59,7 +60,7 @@ class OrderApiIntegrationTest {
 
     @Test
     void shouldReturn401_whenFestivalierNotAuthenticated() throws Exception {
-        CreateOrderRequest.Article article = new CreateOrderRequest.Article("mojito", 2);
+        Article article = new Article("mojito", 2);
         CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
 
         // Configure the @MockBean to throw UnauthorizedException for this test
