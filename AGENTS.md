@@ -32,6 +32,13 @@ You MUST strictly adhere to the following guidelines:
 - **ALWAYS** start replies with 🟢 as STARTER_CHARACTER when entering a green phase of TDD (writing code to make tests pass).
 - **ALWAYS** start replies with ⚪ as STARTER_CHARACTER when entering a refactoring phase of TDD (improving code without changing behavior).
 
+### Code Generation: imports vs FQCN
+
+- **PREFERRED**: When generating or patching Java source files, add normal `import` statements at the top of the file and use simple class names inside annotations and code (for example, add `import com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository;` and then use `@Import(InMemoryOrderRepository.class)`).
+- **AVOID**: embedding fully-qualified class names inside annotations or code (for example `@Import(com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository.class)`) because it reduces readability, makes diffs noisier, and is harder to refactor.
+
+Agents should follow the Java coding guidelines and prefer explicit imports whenever possible. If a helper or generator must use a FQCN temporarily, add the corresponding import as a subsequent patch.
+
 ### MAJOR : Active Partner
 
 - Don't flatter me. Be charming and nice, but stay very honest. Tell me the truth, even if i don't want to hear it.
@@ -123,6 +130,23 @@ The project follows a Hexagonal Architecture (Ports and Adapters), organized int
 - Load the [Infrastructure Testing Guideline](./docs/agents/instructions/testing/infrastructure-testing-guideline.md) when adding or modifying tests in the `infrastructure` module, or when a task touches persistence adapters, external clients, scheduling adapters, technical mappings, or integration boundaries.
 - Load the [Documentation Guidelines](./docs/agents/instructions/coding/documentation-guidelines.md) when updating `README.md`, `FEATURES.md`, files under `docs/`, or any other repository documentation. Use it to decide where a documentation change belongs and how specific it should be.
 - Load the [AGENTS.md Maintenance Guidelines](./docs/agents/instructions/coding/agents-md-maintenance-guidelines.md) when editing `AGENTS.md` or any other AI-facing instruction file under `docs/agents/instructions/`. Use it to keep instruction files actionable, non-contradictory, and aligned with the current repository state.
+
+- When running shell commands whose textual output the agent must read back, redirect the console output into a file under the repository `tmp/` directory (for example `tmp/command-output.txt`) and read that file instead of relying on ephemeral terminal capture. This ensures deterministic access to the command results for subsequent processing.
+
+### Naming & Package Convention (French domain names)
+
+- Project convention update: domain-level types (entities, use-cases, DTOs, repository *interfaces*, exceptions) MAY use French identifiers where appropriate (for this repository the team prefers French domain vocabulary). Examples: `Commande`, `CreerCommandeUseCase`, `CatalogueRepository`, `StockInsuffisantException`.
+- Technical implementations, frameworks, adapters and infra classes MUST remain in the `infrastructure` module and keep implementation-focused names (for example `JpaOrderRepository`, `OrderRepositoryImpl`). These classes should adapt to the domain interfaces via imports.
+- Package layout recommendation for `domain` module (order bounded context):
+  - `com.it.exalt.belair.domain.order.entity`  — domain entities (e.g. `Commande`, `CommandeLigne`)
+  - `com.it.exalt.belair.domain.order.usecase` — use case interfaces and implementations (e.g. `CreerCommandeUseCase`, `PasserCommandeUseCase`)
+  - `com.it.exalt.belair.domain.order.repository` — repository interfaces (ports) (e.g. `CatalogueRepository`, `CommandeRepository`, `StockRepository`)
+  - `com.it.exalt.belair.domain.order.dto` — DTOs and simple value objects exchanged with application layer
+  - `com.it.exalt.belair.domain.order.exception` — domain exceptions (e.g. `StockInsuffisantException`, `ArticleInconnuException`)
+
+- Migration approach: perform the refactor in small, verifiable steps: 1) add package READMEs listing current files and suggested targets, 2) rename/relocate types and update imports, 3) run tests and fix compile errors, 4) finalize by removing legacy files. This reduces breakage and eases review.
+
+Use these guidelines when the agent performs automated renames or when contributors create new domain artifacts.
 
 ## Documentation guidelines
 

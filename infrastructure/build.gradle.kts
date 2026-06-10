@@ -10,4 +10,10 @@ plugins {
 
 dependencies {
     implementation(project(":domain"))
+    // Spring context to expose beans
+    implementation("org.springframework.boot:spring-boot-starter:3.2.6")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.6")
+    runtimeOnly("com.h2database:h2:2.1.214")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.6")
+    testImplementation("com.h2database:h2:2.1.214")
 }

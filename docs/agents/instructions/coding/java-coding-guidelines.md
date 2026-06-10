@@ -175,3 +175,25 @@ Avoid:
 - keep dependency versions centralized in `gradle/libs.versions.toml` when versions are introduced
 
 Because this repository is still a starter, do not assume frameworks that are not already present.
+
+## 13. Imports and Generated Code
+
+- When agents or contributors generate or patch Java files, prefer adding regular `import` statements at the top of the file and use simple class names in the body and in annotations.
+- Avoid leaving fully-qualified class names (FQCNs) inline in annotations or code. FQCNs make diffs noisy and hinder automated refactorings.
+- If a FQCN is used as a short-term workaround in a quick patch, follow up with a small refactor commit that adds the proper import and replaces the FQCN with the simple name.
+
+Example (preferred):
+
+```java
+import com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository;
+
+@Import(InMemoryOrderRepository.class)
+public class SomeTest { ... }
+```
+
+Example (avoid):
+
+```java
+@Import(com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository.class)
+public class SomeTest { ... }
+```

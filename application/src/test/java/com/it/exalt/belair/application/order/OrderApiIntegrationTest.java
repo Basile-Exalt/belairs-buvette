@@ -10,11 +10,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.jupiter.api.Assertions.*;
-import com.it.exalt.belair.domain.order.CreateOrderResponse;
+import com.it.exalt.belair.domain.order.dto.CreerCommandeResponse;
 import com.it.exalt.belair.application.utils.TestUtils;
-import com.it.exalt.belair.domain.order.CreateOrderRequest;
+import com.it.exalt.belair.domain.order.dto.CreerCommandeRequest;
 import com.it.exalt.belair.domain.order.Article;
-import com.it.exalt.belair.domain.order.CreateOrderUseCase;
+import com.it.exalt.belair.domain.order.usecase.CreerCommandeUseCase;
 import java.util.List;
 import java.util.Collections;
 import static org.mockito.Mockito.*;
@@ -30,8 +30,8 @@ class OrderApiIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private CreateOrderUseCase createOrderUseCase;
+    @MockBean(name = "createOrderUseCase")
+    private CreerCommandeUseCase createOrderUseCase;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ class OrderApiIntegrationTest {
     @Test
     void shouldCreateOrderAndReturn201_withCommandeId_and_statusPending() throws Exception {
         Article article = new Article("mojito", 2);
-        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
+        CreerCommandeRequest request = new CreerCommandeRequest("festivalier-42", List.of(article));
 
         // arrange
         TestUtils.mockSuccess(createOrderUseCase);
@@ -53,7 +53,7 @@ class OrderApiIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        CreateOrderResponse resp = TestUtils.fromResult(result, CreateOrderResponse.class);
+        CreerCommandeResponse resp = TestUtils.fromResult(result, CreerCommandeResponse.class);
         assertNotNull(resp.orderId());
         assertEquals("EN_ATTENTE", resp.status());
     }
@@ -61,7 +61,7 @@ class OrderApiIntegrationTest {
     @Test
     void shouldReturn401_whenFestivalierNotAuthenticated() throws Exception {
         Article article = new Article("mojito", 2);
-        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", List.of(article));
+        CreerCommandeRequest request = new CreerCommandeRequest("festivalier-42", List.of(article));
 
         // Configure the @MockBean to throw UnauthorizedException for this test
         TestUtils.mockUnauthorized(createOrderUseCase);
@@ -74,7 +74,7 @@ class OrderApiIntegrationTest {
 
     @Test
     void shouldReturn400_whenRequestBodyIsInvalid() throws Exception {
-        CreateOrderRequest request = new CreateOrderRequest("festivalier-42", Collections.emptyList());
+        CreerCommandeRequest request = new CreerCommandeRequest("festivalier-42", Collections.emptyList());
 
         TestUtils.mockInvalidRequest(createOrderUseCase);
 
