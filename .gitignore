@@ -10,3 +10,5 @@ build
 
 # Ignore temporary test outputs captured by the agent
 tmp/
+
+revision.md

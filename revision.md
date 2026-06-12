@@ -98,4 +98,23 @@ Un point clé à renforcer.
 
 ---
 
-J'espère que cette fiche structurée vous sera utile pour vos révisions.
+
+SELECT 
+    ft.extension AS file_extension,
+    COALESCE(q.q_count,0) AS QuantumSafe_detections,
+    COALESCE(w.w_count,0) AS WebGuardian_detections,
+    COALESCE(q.q_count,0) + COALESCE(w.w_count,0) AS total_detections
+FROM file_types ft
+LEFT JOIN (
+    SELECT filetype_id, COUNT(*) AS q_count
+    FROM quantumsafe_detections
+    WHERE dt >= '2023-07-01' AND dt < '2023-08-01'
+    GROUP BY filetype_id
+) q ON ft.id = q.filetype_id
+LEFT JOIN (
+    SELECT filetype_id, COUNT(*) AS w_count
+    FROM webguardian_detections
+    WHERE dt >= '2023-07-01' AND dt < '2023-08-01'
+    GROUP BY filetype_id
+) w ON ft.id = w.filetype_id
+ORDER BY ft.extension;
