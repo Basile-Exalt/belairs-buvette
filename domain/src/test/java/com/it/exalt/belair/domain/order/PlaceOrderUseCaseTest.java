@@ -59,6 +59,25 @@ class PlaceOrderUseCaseTest {
     }
 
     @Test
+    void shouldCreateOrderAndDecrementStockWhenItemAvailable() {
+        // Given an item "Bière Pale Ale" available in stock (10 units)
+        InMemoryStock stock = new InMemoryStock();
+        stock.setQuantity("Bière Pale Ale", 10);
+
+        // When a customer orders 2 units
+        PasserCommandeCommand command = new PasserCommandeCommand(new Article("Bière Pale Ale", 2));
+        PasserCommandeUseCase useCase = new PasserCommandeUseCase(new InMemoryStockAdapter(), new InMemoryCatalog());
+        PasserCommandeResult result = useCase.placeOrder(command);
+
+        // Then the order is created with status PENDING
+        assertThat(result).isNotNull();
+        assertThat(result.status()).isEqualTo(OrderStatus.PENDING);
+
+        // And the stock is decremented by 2
+        assertThat(InMemoryStock.getQuantityStatic("Bière Pale Ale")).isEqualTo(8);
+    }
+
+    @Test
     void givenInsufficientStock_whenPlacingOrder_thenOrderIsRefusedAndStockUnchanged() {
         // Given an in-memory stock with Mojito = 1
         InMemoryStock stock = new InMemoryStock();
