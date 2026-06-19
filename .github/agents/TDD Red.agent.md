@@ -25,10 +25,15 @@ The user will provide you with :
 2. Check if a test file already exists for the scope of this test scenario. 
    - If it exists, append the new test case to the existing file.
    - If it does not exist, create a new test file in the appropriate directory structure based on the module (domain, application, infrastructure). 
-3. Write the test case so it accurately reflects the scenario and is expected to fail initially. You MUST Follow the testing guidelines for the module you are currently working on : 
-    - for the domain module, follow the guidelines in `docs/agents/instructions/domain-testing.instructions.md`
-    - for the application module, follow the guidelines in `docs/agents/instructions/application-testing.instructions.md`
-    - for the infrastructure module, follow the guidelines in `docs/agents/instructions/infrastructure-testing.instructions.md`
+3. Write the test case(s) so they accurately reflect the feature's rules or scenario and are expected to fail initially. Follow these rules for test generation:
+   - If the input is a single `Scenario`, create one failing test matching that scenario.
+   - If the input is a `Feature` containing one or more `Rule` sections, create a separate failing test method for each `Rule`.
+   - Name each test method using the Rule or Scenario title converted to a descriptive camelCase name prefixed with `should` (for example `shouldRejectWhenStockInsufficient`).
+   - Place tests in the appropriate module test directory and follow the testing guidelines for that module:
+     - for the domain module, follow `docs/agents/instructions/domain-testing.instructions.md`
+     - for the application module, follow `docs/agents/instructions/application-testing.instructions.md`
+     - for the infrastructure module, follow `docs/agents/instructions/infrastructure-testing.instructions.md`
+   - When a test file already exists for the scope, append each Rule as a separate `@Test` method; do not collapse multiple Rules into a single test.
 4. Run the test to confirm it fails.
 5. Before ending the turn, summarize the changes made in the required format. You should include : 
     - A brief description of the test scenario implemented.
