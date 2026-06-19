@@ -30,7 +30,7 @@ class OrderApiIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean(name = "createOrderUseCase")
+    @MockBean
     private CreerCommandeUseCase createOrderUseCase;
 
     @BeforeEach

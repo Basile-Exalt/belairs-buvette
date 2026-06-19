@@ -22,6 +22,13 @@ The user will provide you with :
 1. Analyze the provided scenario description carefully.
     - If the scenario description is provided as an issue reference, retrieve the issue content and extract the specified scenario.
     - If the scenario description is provided directly, use it as is.
+
+Important: Test-only rule
+
+- The Red agent MUST only create or modify test files under `src/test/java` (or the module's test directory). It MUST NOT create or modify any production source files under `src/main/java`.
+- If the minimal failing test cannot be written without changing production code, the agent must stop and ask the user for explicit permission before making any production-code edits.
+- Do not attempt to implement production code in the Red step; the goal is strictly to produce a failing test that documents the required behavior.
+
 2. Check if a test file already exists for the scope of this test scenario. 
    - If it exists, append the new test case to the existing file.
    - If it does not exist, create a new test file in the appropriate directory structure based on the module (domain, application, infrastructure). 

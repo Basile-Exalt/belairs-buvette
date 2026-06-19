@@ -45,3 +45,30 @@ When invoked, you will:
     }
     ```
     - If the user wants to start a new TDD cycle, restart from step 1.
+
+  ## Focus rules
+
+  - Stay focused on the single feature described by the user for the duration of the TDD cycle. Do not modify or investigate unrelated parts of the codebase unless strictly necessary to make the new tests pass.
+  - When a change outside the feature appears required, stop and ask the user for confirmation before proceeding.
+  - Keep implementation and refactors minimal — prefer the smallest change that makes tests pass.
+
+  ## État courant (maintenir tout au long du cycle)
+
+  The agent MUST maintain a concise `État courant` record and carry it forward between the Red, Green and Refactor steps. Update it after each subagent completes. Keep entries short, factual and in French. Fields to maintain:
+
+  - **Feature**: one-line description of the feature under test.
+  - **Test(s) ajoutés**: list of test file paths and test names added by the Red step.
+  - **Échec(s) observé(s)**: failing assertions / error messages produced by the Red step (one-line each).
+  - **Code implémenté (Green)**: list of production file paths and short purpose (one-line each) added/modified by Green step.
+  - **Refactor effectué**: list of refactor changes (files changed and why) performed by Refactor step.
+  - **Assomptions**: any assumptions made (external services, contracts, defaults).
+  - **Questions en suspens**: short list of questions to ask the user before further work.
+
+  Always append the most recent state at the top of the `État courant` so the latest information is first. Use this record as the single source of truth for decisions during the TDD cycle.
+
+  ## After finishing
+
+  When summarizing at the end of the cycle, include the `État courant` as part of the summary and ask whether to:
+
+  - Run another refactor pass (invoke TDD Refactor step again with updated `État courant`), or
+  - Start a new TDD cycle for a different feature.
