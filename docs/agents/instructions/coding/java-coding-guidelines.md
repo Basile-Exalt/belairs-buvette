@@ -185,15 +185,15 @@ Because this repository is still a starter, do not assume frameworks that are no
 Example (preferred):
 
 ```java
-import com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository;
+import com.it.exalt.belair.infrastructure.order.OrderRepository;
 
-@Import(InMemoryOrderRepository.class)
+@Import(OrderRepository.class)
 public class SomeTest { ... }
 ```
 
 Example (avoid):
 
 ```java
-@Import(com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository.class)
+@Import(com.it.exalt.belair.infrastructure.order.OrderRepository.class)
 public class SomeTest { ... }
 ```

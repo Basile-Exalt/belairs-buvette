@@ -34,7 +34,7 @@ You MUST strictly adhere to the following guidelines:
 
 ### Code Generation: imports vs FQCN
 
-- **PREFERRED**: When generating or patching Java source files, add normal `import` statements at the top of the file and use simple class names inside annotations and code (for example, add `import com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository;` and then use `@Import(InMemoryOrderRepository.class)`).
+- **PREFERRED**: When generating or patching Java source files, add normal `import` statements at the top of the file and use simple class names inside annotations and code (for example, add `import com.it.exalt.belair.infrastructure.order.OrderRepository;` and then use `@Import(OrderRepository.class)`).
 - **AVOID**: embedding fully-qualified class names inside annotations or code (for example `@Import(com.it.exalt.belair.infrastructure.order.InMemoryOrderRepository.class)`) because it reduces readability, makes diffs noisier, and is harder to refactor.
 
 Agents should follow the Java coding guidelines and prefer explicit imports whenever possible. If a helper or generator must use a FQCN temporarily, add the corresponding import as a subsequent patch.
