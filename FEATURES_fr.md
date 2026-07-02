@@ -1,3 +1,9 @@
+---
+title: "Fonctionnalités de la Buvette de Bel'Air"
+mcp_issue_number: 15
+mcp_issue_url: "https://github.com/Basile-Exalt/belairs-buvette/issues/15"
+---
+
 # Fonctionnalités de la Buvette de Bel'Air
 
 Bienvenue dans le projet La Buvette de Bel'Air ! Ce document présente les fonctionnalités clés du backend conçu pour gérer efficacement les boissons et les snacks.

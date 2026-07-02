@@ -1,0 +1,30 @@
+---
+title: "Multiple items in a single order"
+mcp_issue_number: 8
+mcp_issue_url: "https://github.com/Basile-Exalt/belairs-buvette/issues/8"
+---
+
+# Multiple items in a single order
+
+## Context
+Festival goers should place orders containing multiple items (drinks and/or food) with aggregated token checks per type.
+
+## Success criteria
+- Order creation supports multiple items.
+- Total drink token cost and total food token cost are validated separately.
+
+## Description
+Allow creating an order with multiple items; compute total token costs by category and validate balances before accepting the order.
+
+## Gherkin Scenarios
+```gherkin
+Scenario: Multi-item order within balances
+  Given a festival goer with 2 drink tokens and 3 food tokens
+  When they order 1 normal alcoholic drink and 1 meal
+  Then the order is accepted and tokens deducted accordingly
+
+Scenario: Multi-item order exceeding one balance
+  Given a festival goer with 1 drink token and 3 food tokens
+  When they order 1 normal alcoholic drink and 2 premium alcoholic drinks
+  Then the order is rejected due to insufficient drink tokens
+```

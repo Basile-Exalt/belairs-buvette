@@ -1,0 +1,31 @@
+---
+title: "Cancel an order"
+mcp_issue_number: 2
+mcp_issue_url: "https://github.com/Basile-Exalt/belairs-buvette/issues/2"
+---
+
+# Cancel an order
+
+## Context
+Festival goers should be able to cancel orders that have not been acknowledged.
+
+## Success criteria
+- Cancel orders only when not acknowledged.
+- Refund tokens to the festival goer.
+- Send cancellation confirmation.
+
+## Description
+Implement order cancellation endpoint with validation, token refund, and notification to the user.
+
+## Gherkin Scenarios
+```gherkin
+Scenario: Cancel unacknowledged order
+  Given an unacknowledged order
+  When the festival goer cancels it
+  Then tokens are refunded and confirmation is sent
+
+Scenario: Cancel acknowledged order
+  Given an acknowledged order
+  When the festival goer attempts to cancel
+  Then cancellation is rejected
+```

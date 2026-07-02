@@ -1,3 +1,9 @@
+---
+title: "Bel'Air's Buvette Features"
+mcp_issue_number: 13
+mcp_issue_url: "https://github.com/Basile-Exalt/belairs-buvette/issues/13"
+---
+
 # Bel'Air's Buvette Features
 
 Welcome to the Bel'Air's Buvette project! This document outlines the key features and functionalities of the backend system designed to manage drinks and snacks efficiently.

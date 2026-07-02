@@ -1,0 +1,28 @@
+---
+title: "Review changes to acknowledged orders"
+mcp_issue_number: 11
+mcp_issue_url: "https://github.com/Basile-Exalt/belairs-buvette/issues/11"
+---
+
+# Review changes to acknowledged orders
+
+## Context
+Bartenders must be able to accept or reject change requests for acknowledged orders when feasible.
+
+## Success criteria
+- Change request evaluation workflow for acknowledged orders.
+- Accept only if at least one prepared item can be transferred.
+- Notify festival goer of decision and updated ETA if accepted.
+
+## Gherkin Scenarios
+```gherkin
+Scenario: Accept change request
+  Given an acknowledged order with transferrable prepared items
+  When bartender accepts the change
+  Then the order is updated and festival goer is notified with new ETA
+
+Scenario: Reject change request
+  Given an acknowledged order with no transferrable items
+  When bartender rejects the change
+  Then the festival goer is notified of rejection
+```
