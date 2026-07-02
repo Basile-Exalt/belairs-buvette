@@ -133,6 +133,11 @@ The project follows a Hexagonal Architecture (Ports and Adapters), organized int
 
 - When running shell commands whose textual output the agent must read back, redirect the console output into a file under the repository `tmp/` directory (for example `tmp/command-output.txt`) and read that file instead of relying on ephemeral terminal capture. This ensures deterministic access to the command results for subsequent processing.
 
+## IssuePusher agent
+
+- **Name**: IssuePusher — Push local issue files to GitHub via MCP.
+- **Purpose**: Create remote issues from `docs/features/**` files when missing, and write back `mcp_issue_number`/`mcp_issue_url` into the file frontmatter. See `.github/agents/issue-pusher.agent.md` for details.
+
 ### Naming & Package Convention (French domain names)
 
 - Project convention update: domain-level types (entities, use-cases, DTOs, repository *interfaces*, exceptions) MAY use French identifiers where appropriate (for this repository the team prefers French domain vocabulary). Examples: `Commande`, `CreerCommandeUseCase`, `CatalogueRepository`, `StockInsuffisantException`.
